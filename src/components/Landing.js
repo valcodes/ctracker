@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import CryptoRow from "./CryptoRow";
 
 export default class Landing extends Component {
   constructor(props) {
@@ -9,6 +10,10 @@ export default class Landing extends Component {
   }
 
   render() {
-    return <div>Landing </div>;
+    return (
+      <div>
+        <CryptoRow cardtext={"test"} />
+      </div>
+    );
   }
 }
