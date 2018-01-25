@@ -3,9 +3,7 @@ import React, { Component } from "react";
 export default class News extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      coins: []
-    };
+    this.state = {};
   }
 
   render() {
