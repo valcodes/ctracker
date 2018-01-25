@@ -10,9 +10,7 @@ import getMuiTheme from "material-ui/styles/getMuiTheme";
 export default class Navbar extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      coins: []
-    };
+    this.state = {};
   }
 
   render() {
