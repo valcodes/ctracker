@@ -1,6 +1,9 @@
 import React, { Component } from "react";
 import CryptoRow from "./CryptoRow";
 import axios from "axios";
+import numeral from "numeral";
+
+import "./Landing.css";
 
 export default class Landing extends Component {
   constructor(props) {
@@ -22,17 +25,21 @@ export default class Landing extends Component {
     console.log(this.state.coins);
     const coinDisplay = this.state.coins.map((coin, index) => {
       return (
-        <div className="coin-container" key={index}>
-          {coin.name}
-          {coin.symbol}
-          price {coin.price_usd}
-        </div>
+        <CryptoRow
+          cardtext={
+            <div className="coin-container" key={index}>
+              <div>
+                {coin.name} ({coin.symbol})
+              </div>
+              <div> {numeral(coin.market_cap_usd).format("$0,0")}</div>
+              <div> {numeral(coin.price_usd).format("$0,0.0000")}</div>
+              <div>{coin.percent_change_24h} %</div>
+              <div>Add to watch list </div>
+            </div>
+          }
+        />
       );
     });
-    return (
-      <div>
-        <CryptoRow cardtext={coinDisplay} />
-      </div>
-    );
+    return <div>{coinDisplay}</div>;
   }
 }

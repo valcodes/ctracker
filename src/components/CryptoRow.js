@@ -8,10 +8,9 @@ export default class CryptoRow extends Component {
     return (
       <div>
         <Card>
-          <CardText> {cardtext}</CardText>
-
-          <Divider />
+          <CardText>{cardtext}</CardText>
         </Card>
+        <Divider />
       </div>
     );
   }
