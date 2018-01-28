@@ -44,21 +44,24 @@ export default class Landing extends Component {
 
         sortMethod: function(a, b) {
           return a - b;
-        }
+        },
+        Cell: row => numeral(row.value).format("$0,0")
       },
       {
         Header: "Price (USD)",
         accessor: "price_usd",
         sortMethod: function(a, b) {
           return a - b;
-        }
+        },
+        Cell: row => numeral(row.value).format("$0,0.0000")
       },
       {
         Header: "24hr change",
         accessor: "percent_change_24h",
         sortMethod: function(a, b) {
           return a - b;
-        }
+        },
+        Cell: row => numeral(row.value).format("0.00") + " %"
       }
     ];
     console.log(columns);
