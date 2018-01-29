@@ -15,9 +15,8 @@ app.use(cors());
 
 app.get("/api/getcoins", (req, res, next) => {
   axios
-    .get("https://api.coinmarketcap.com/v1/ticker/?limit=10")
+    .get("https://api.coinmarketcap.com/v1/ticker/?limit=0")
     .then(response => {
-      console.log(response.data);
       return res.send(response.data);
     })
     .catch(console.log);
