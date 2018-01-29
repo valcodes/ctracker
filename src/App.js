@@ -1,32 +1,17 @@
 import React, { Component } from "react";
-
+import darkBaseTheme from "material-ui/styles/baseThemes/darkBaseTheme";
 import "./App.css";
+import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import router from "./router";
 import Navbar from "./components/Navbar";
-import { createMuiTheme, MuiThemeProvider } from "material-ui/styles";
+import getMuiTheme from "material-ui/styles/getMuiTheme";
 
 class App extends Component {
   render() {
-    const muiTheme = createMuiTheme({
-      palette: {
-        primary: {
-          light: "#ffc4ff",
-          main: "#ce93d8",
-          dark: "#9c64a6",
-          contrastText: "#fff"
-        },
-        secondary: {
-          light: "#ffffff",
-          main: "#ffcdd2",
-          dark: "#cb9ca1",
-          contrastText: "#000"
-        }
-      }
-    });
     return (
       <div className="App">
         <div>
-          <MuiThemeProvider theme={muiTheme}>
+          <MuiThemeProvider muiTheme={getMuiTheme(darkBaseTheme)}>
             <Navbar />
             {router}
           </MuiThemeProvider>
