@@ -4,8 +4,7 @@ import axios from "axios";
 import "react-table/react-table.css";
 import numeral from "numeral";
 import Paper from "material-ui/Paper";
-
-import Divider from "material-ui/Divider";
+import moment from "moment";
 
 import "./Landing.css";
 
@@ -31,16 +30,15 @@ export default class Landing extends Component {
     const data = this.state.coins;
     const columns = [
       {
+        Header: "Symbol",
+        accessor: "symbol"
+      },
+      {
         Header: "Coin Name",
         headerClassName: "pink",
         accessor: "name",
 
-        Cell: row => (
-          <div>
-            {row.value}
-            <Divider />
-          </div>
-        )
+        Cell: row => <div>{row.value}</div>
       },
       {
         Header: "Market Cap",
@@ -50,12 +48,7 @@ export default class Landing extends Component {
         sortMethod: function(a, b) {
           return a - b;
         },
-        Cell: row => (
-          <div>
-            {numeral(row.value).format("$0,0")}
-            <Divider />
-          </div>
-        )
+        Cell: row => <div>{numeral(row.value).format("$0,0")}</div>
       },
       {
         Header: "Price (USD)",
@@ -64,12 +57,11 @@ export default class Landing extends Component {
         sortMethod: function(a, b) {
           return a - b;
         },
-        Cell: row => (
-          <div>
-            {numeral(row.value).format("$0,0.0000")}
-            <Divider />
-          </div>
-        )
+        Cell: row => <div>{numeral(row.value).format("$0,0.0000")}</div>
+      },
+      {
+        Header: "Date",
+        Cell: moment().format("l")
       },
       {
         Header: "24hr change",
@@ -78,24 +70,21 @@ export default class Landing extends Component {
         sortMethod: function(a, b) {
           return a - b;
         },
+
         Cell: row => (
-          <div>
+          <div style={{ color: row.value > 0 ? "green" : "red" }}>
             {numeral(row.value).format("0.00") + " %"}
-            <Divider />
           </div>
         )
       }
     ];
-    console.log(this.state.coins);
+
     return (
       <div className="coin-header">
-        <Paper>
-          <ReactTable
-            data={data}
-            columns={columns}
-            className="-highlight -striped"
-          />
-          <Divider />
+        <Paper
+          style={({ width: "80%" }, { align: "center" }, { margin: "3%" })}
+        >
+          <ReactTable data={data} columns={columns} className="-highlight " />
         </Paper>
       </div>
     );
