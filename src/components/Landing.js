@@ -4,6 +4,7 @@ import axios from "axios";
 import "react-table/react-table.css";
 import numeral from "numeral";
 import Paper from "material-ui/Paper";
+import TextField from "material-ui/TextField";
 import moment from "moment";
 
 import "./Landing.css";
@@ -12,7 +13,8 @@ export default class Landing extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      coins: []
+      coins: [],
+      search: []
     };
   }
   componentDidMount() {
@@ -27,17 +29,33 @@ export default class Landing extends Component {
   }
 
   render() {
-    const data = this.state.coins;
+    let data = this.state.coins;
+    console.log(data);
+    if (this.state.search) {
+      data = data.filter(row => {
+        return (
+          row.symbol.includes(this.state.search) ||
+          row.name.includes(this.state.search) ||
+          String(row.market_cap_usd).includes(this.state.search) ||
+          String(row.price_usd).includes(this.state.search) ||
+          String(row.percent_change_24h).includes(this.state.search)
+        );
+      });
+    }
     const columns = [
       {
         Header: "Symbol",
-        accessor: "symbol"
+        accessor: "symbol",
+        headerClassName: "pink",
+
+        Cell: row => <div>{row.value}</div>
       },
       {
         Header: "Coin Name",
-        headerClassName: "pink",
+        headerClassName: "pink-one",
         accessor: "name",
 
+        className: "coin-name",
         Cell: row => <div>{row.value}</div>
       },
       {
@@ -53,20 +71,22 @@ export default class Landing extends Component {
       {
         Header: "Price (USD)",
         headerClassName: "pink",
+
         accessor: "price_usd",
         sortMethod: function(a, b) {
           return a - b;
         },
         Cell: row => <div>{numeral(row.value).format("$0,0.0000")}</div>
       },
+      // {
+      //   Header: "Date",
+      //   Cell: moment().format("l")
+      // },
       {
-        Header: "Date",
-        Cell: moment().format("l")
-      },
-      {
-        Header: "24hr change",
+        Header: "24h Change",
         headerClassName: "pink",
         accessor: "percent_change_24h",
+
         sortMethod: function(a, b) {
           return a - b;
         },
@@ -82,9 +102,40 @@ export default class Landing extends Component {
     return (
       <div className="coin-header">
         <Paper
-          style={({ width: "80%" }, { align: "center" }, { margin: "3%" })}
+          style={{
+            minWidth: "70%"
+          }}
         >
-          <ReactTable data={data} columns={columns} className="-highlight " />
+          <div className="search">
+            <TextField
+              hintText="Filter Coins"
+              floatingLabelText="Search"
+              type="search"
+              value={this.state.search}
+              onChange={e => this.setState({ search: e.target.value })}
+            />
+            Crypto Price Watch
+          </div>
+          <ReactTable
+            data={data}
+            columns={columns}
+            filterable={false}
+            resizable={false}
+            className="-highlight "
+            style={{
+              fontSize: ".7em"
+              // minWidth: "65%"
+            }}
+            defaultPageSize={30}
+            paginationStyle={{ backgroundColor: "#00bcd4", color: "white" }}
+            getTdProps={(state, rowInfo, column, instance) => {
+              return {
+                onClick: e => {
+                  console.log(rowInfo.original.id);
+                }
+              };
+            }}
+          />
         </Paper>
       </div>
     );

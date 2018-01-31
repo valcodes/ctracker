@@ -12,8 +12,8 @@ export default class Navbar extends Component {
 
   render() {
     return (
-      <div>
-        <AppBar title="Ctracker" />
+      <div className="nav">
+        <AppBar title="Cryptocurrency Prices" className="nav" />
       </div>
     );
   }

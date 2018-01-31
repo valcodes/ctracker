@@ -10,12 +10,10 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <div>
-          <MuiThemeProvider>
-            <Navbar />
-            {router}
-          </MuiThemeProvider>
-        </div>
+        <MuiThemeProvider>
+          <Navbar />
+          {router}
+        </MuiThemeProvider>
       </div>
     );
   }
