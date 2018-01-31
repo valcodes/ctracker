@@ -101,21 +101,27 @@ export default class Landing extends Component {
 
     return (
       <div className="coin-header">
+        {/* <Paper
+          style={{
+            minWidth: "70%"
+          }}
+        > */}
+        <div className="search">
+          <TextField
+            hintText="Filter Coins"
+            floatingLabelText="Search"
+            type="search"
+            value={this.state.search}
+            onChange={e => this.setState({ search: e.target.value })}
+          />
+          Crypto Price Watch
+        </div>
+        {/* </Paper> */}
         <Paper
           style={{
             minWidth: "70%"
           }}
         >
-          <div className="search">
-            <TextField
-              hintText="Filter Coins"
-              floatingLabelText="Search"
-              type="search"
-              value={this.state.search}
-              onChange={e => this.setState({ search: e.target.value })}
-            />
-            Crypto Price Watch
-          </div>
           <ReactTable
             data={data}
             columns={columns}
@@ -126,8 +132,8 @@ export default class Landing extends Component {
               fontSize: ".7em"
               // minWidth: "65%"
             }}
-            defaultPageSize={30}
-            paginationStyle={{ backgroundColor: "#00bcd4", color: "white" }}
+            defaultPageSize={50}
+            paginationStyle={{ backgroundColor: "#00bcd4" }}
             getTdProps={(state, rowInfo, column, instance) => {
               return {
                 onClick: e => {

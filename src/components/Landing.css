@@ -1,6 +1,7 @@
 .pink {
   color: #00bcd4;
-  font-weight: bold;
+  font-family: "Roboto", sans-serif;
+  /* font-weight: regular; */
   /* max-width: 12%; */
   height: 4vh;
 }
@@ -12,13 +13,16 @@
   justify-content: space-between;
   align-items: center;
   color: #00bcd4;
+  width: 70%;
+  font-family: "Roboto", sans-serif;
+  /* font-weight: bold; */
 }
 .-highlight {
   width: auto;
 }
 .pink-one {
   color: #00bcd4;
-  font-weight: bold;
+  /* font-weight: bold; */
   font-size: 1em;
 }
 .coin-header {

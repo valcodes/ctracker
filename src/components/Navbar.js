@@ -13,7 +13,7 @@ export default class Navbar extends Component {
   render() {
     return (
       <div className="nav">
-        <AppBar title="Cryptocurrency Prices" className="nav" />
+        <AppBar className="nav" />
       </div>
     );
   }
