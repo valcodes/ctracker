@@ -1,21 +1,20 @@
 import React, { Component } from "react";
-import darkBaseTheme from "material-ui/styles/baseThemes/darkBaseTheme";
+// import darkBaseTheme from "material-ui/styles/baseThemes/darkBaseTheme";
 import "./App.css";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import router from "./router";
 import Navbar from "./components/Navbar";
 import getMuiTheme from "material-ui/styles/getMuiTheme";
+import darkBaseTheme from "material-ui/styles/baseThemes/darkBaseTheme";
 
 class App extends Component {
   render() {
     return (
       <div className="App">
-        <div>
-          <MuiThemeProvider muiTheme={getMuiTheme(darkBaseTheme)}>
-            <Navbar />
-            {router}
-          </MuiThemeProvider>
-        </div>
+        <MuiThemeProvider>
+          <Navbar />
+          {router}
+        </MuiThemeProvider>
       </div>
     );
   }

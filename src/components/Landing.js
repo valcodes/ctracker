@@ -4,8 +4,9 @@ import axios from "axios";
 import "react-table/react-table.css";
 import numeral from "numeral";
 import Paper from "material-ui/Paper";
-
-import Divider from "material-ui/Divider";
+import TextField from "material-ui/TextField";
+import AutoComplete from "material-ui/AutoComplete";
+import moment from "moment";
 
 import "./Landing.css";
 
@@ -13,7 +14,8 @@ export default class Landing extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      coins: []
+      coins: [],
+      search: []
     };
   }
   componentDidMount() {
@@ -28,19 +30,35 @@ export default class Landing extends Component {
   }
 
   render() {
-    const data = this.state.coins;
+    let data = this.state.coins;
+    console.log(data);
+    if (this.state.search) {
+      data = data.filter(row => {
+        return (
+          row.symbol.toLowerCase().includes(this.state.search) ||
+          row.name.toLowerCase().includes(this.state.search) ||
+          String(row.market_cap_usd).includes(this.state.search) ||
+          String(row.price_usd).includes(this.state.search) ||
+          String(row.percent_change_24h).includes(this.state.search)
+        );
+      });
+    }
     const columns = [
       {
-        Header: "Coin Name",
+        Header: "Symbol",
+        accessor: "symbol",
         headerClassName: "pink",
+        fontWeight: "bold",
+
+        Cell: row => <div>{row.value}</div>
+      },
+      {
+        Header: "Coin Name",
+        headerClassName: "pink-one",
         accessor: "name",
 
-        Cell: row => (
-          <div>
-            {row.value}
-            <Divider />
-          </div>
-        )
+        className: "coin-name",
+        Cell: row => <div>{row.value}</div>
       },
       {
         Header: "Market Cap",
@@ -50,52 +68,85 @@ export default class Landing extends Component {
         sortMethod: function(a, b) {
           return a - b;
         },
-        Cell: row => (
-          <div>
-            {numeral(row.value).format("$0,0")}
-            <Divider />
-          </div>
-        )
+        Cell: row => <div>{numeral(row.value).format("$0,0")}</div>
       },
       {
         Header: "Price (USD)",
         headerClassName: "pink",
+
         accessor: "price_usd",
         sortMethod: function(a, b) {
           return a - b;
         },
-        Cell: row => (
-          <div>
-            {numeral(row.value).format("$0,0.0000")}
-            <Divider />
-          </div>
-        )
+        Cell: row => <div>{numeral(row.value).format("$0,0.0000")}</div>
       },
+      // {
+      //   Header: "Date",
+      //   Cell: moment().format("l")
+      // },
       {
-        Header: "24hr change",
+        Header: "24h Change",
         headerClassName: "pink",
         accessor: "percent_change_24h",
+
         sortMethod: function(a, b) {
           return a - b;
         },
+
         Cell: row => (
-          <div>
+          <div style={{ color: row.value > 0 ? "green" : "red" }}>
             {numeral(row.value).format("0.00") + " %"}
-            <Divider />
           </div>
         )
       }
     ];
-    console.log(this.state.coins);
+
     return (
       <div className="coin-header">
-        <Paper>
+        {/* <Paper
+          style={{
+            minWidth: "70%"
+          }}
+        > */}
+        <div className="search">
+          <TextField
+            hintText="Filter Coins"
+            floatingLabelText="Search"
+            type="search"
+            // filter={AutoComplete.caseInsensitiveFilter}
+            data={this.state.search}
+            onChange={e => this.setState({ search: e.target.value })}
+          />
+          <i className="fa fa-search"</i>
+          
+          Crypto Price Watch
+        </div>
+        {/* </Paper> */}
+        <Paper
+          style={{
+            minWidth: "70%"
+          }}
+        >
           <ReactTable
             data={data}
             columns={columns}
-            className="-highlight -striped"
+            filterable={false}
+            resizable={false}
+            className="-highlight "
+            style={{
+              fontSize: ".7em"
+              // minWidth: "65%"
+            }}
+            defaultPageSize={50}
+            paginationStyle={{ backgroundColor: "#00bcd4", color: "white" }}
+            getTdProps={(state, rowInfo, column, instance) => {
+              return {
+                onClick: e => {
+                  console.log(rowInfo.original.id);
+                }
+              };
+            }}
           />
-          <Divider />
         </Paper>
       </div>
     );
