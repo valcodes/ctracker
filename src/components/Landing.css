@@ -1,9 +1,18 @@
 .pink {
   color: #00bcd4;
   font-family: "Roboto", sans-serif;
-  /* font-weight: regular; */
+  /* font-weight: bold; */
   /* max-width: 12%; */
   height: 4vh;
+}
+.bold {
+  font-weight: bold;
+  color: #00bcd4;
+}
+.buttons {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 .search {
   margin-left: 2vh;
@@ -13,12 +22,12 @@
   justify-content: space-between;
   align-items: center;
   color: #00bcd4;
-  width: 70%;
+  width: 100vh;
   font-family: "Roboto", sans-serif;
   /* font-weight: bold; */
 }
 .-highlight {
-  width: auto;
+  width: 100vh;
 }
 .pink-one {
   color: #00bcd4;
@@ -27,7 +36,7 @@
 }
 .coin-header {
   width: 80%;
-
+  height: auto;
   margin-left: 5vh;
   margin-right: 5vh;
   margin-top: 3vh;
@@ -45,10 +54,8 @@
   }
   .coin-header {
     width: 100%;
-    margin: auto;
   }
   .-highlight {
     width: 100%;
-    margin: auto;
   }
 }
