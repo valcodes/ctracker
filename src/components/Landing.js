@@ -117,14 +117,8 @@ export default class Landing extends Component {
             data={this.state.search}
             onChange={e => this.setState({ search: e.target.value })}
           />
-          {/* <AutoComplete
-            floatingLabelText="Search"
-            filter={AutoComplete.caseInsensitiveFilter}
-            dataSource={data}
-            hintText="Filter Coins"
-            onChange={e => this.setState({ search: e.target.value })}
-            // type="search"
-          /> */}
+          <i className="fa fa-search"</i>
+          
           Crypto Price Watch
         </div>
         {/* </Paper> */}
