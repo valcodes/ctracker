@@ -3,6 +3,6 @@
 ### work in progress
 
 <p align="center">
-  <img src="/Landing.png" width="600"/>
+  <img src="/Landing.png"/>
   
 </p>
