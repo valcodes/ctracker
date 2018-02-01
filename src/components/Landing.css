@@ -35,7 +35,7 @@
   flex-direction: column;
   align-items: center;
 }
-@media (max-width: 457px) {
+@media (max-width: 780px) {
   .coin-name {
     display: none;
   }
@@ -43,9 +43,12 @@
     display: none;
     /* flex-direction: row; */
   }
+  .coin-header {
+    width: 100%;
+    margin: auto;
+  }
   .-highlight {
-    /* height: auto; */
-    /* width: 90vw; */
-    font-size: 0.75em;
+    width: 100%;
+    margin: auto;
   }
 }

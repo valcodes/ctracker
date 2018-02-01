@@ -5,6 +5,7 @@ import "react-table/react-table.css";
 import numeral from "numeral";
 import Paper from "material-ui/Paper";
 import TextField from "material-ui/TextField";
+import AutoComplete from "material-ui/AutoComplete";
 import moment from "moment";
 
 import "./Landing.css";
@@ -34,8 +35,8 @@ export default class Landing extends Component {
     if (this.state.search) {
       data = data.filter(row => {
         return (
-          row.symbol.includes(this.state.search) ||
-          row.name.includes(this.state.search) ||
+          row.symbol.toLowerCase().includes(this.state.search) ||
+          row.name.toLowerCase().includes(this.state.search) ||
           String(row.market_cap_usd).includes(this.state.search) ||
           String(row.price_usd).includes(this.state.search) ||
           String(row.percent_change_24h).includes(this.state.search)
@@ -47,6 +48,7 @@ export default class Landing extends Component {
         Header: "Symbol",
         accessor: "symbol",
         headerClassName: "pink",
+        fontWeight: "bold",
 
         Cell: row => <div>{row.value}</div>
       },
@@ -111,9 +113,18 @@ export default class Landing extends Component {
             hintText="Filter Coins"
             floatingLabelText="Search"
             type="search"
-            value={this.state.search}
+            // filter={AutoComplete.caseInsensitiveFilter}
+            data={this.state.search}
             onChange={e => this.setState({ search: e.target.value })}
           />
+          {/* <AutoComplete
+            floatingLabelText="Search"
+            filter={AutoComplete.caseInsensitiveFilter}
+            dataSource={data}
+            hintText="Filter Coins"
+            onChange={e => this.setState({ search: e.target.value })}
+            // type="search"
+          /> */}
           Crypto Price Watch
         </div>
         {/* </Paper> */}
@@ -133,7 +144,7 @@ export default class Landing extends Component {
               // minWidth: "65%"
             }}
             defaultPageSize={50}
-            paginationStyle={{ backgroundColor: "#00bcd4" }}
+            paginationStyle={{ backgroundColor: "#00bcd4", color: "white" }}
             getTdProps={(state, rowInfo, column, instance) => {
               return {
                 onClick: e => {
