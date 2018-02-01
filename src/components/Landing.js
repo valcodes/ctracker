@@ -5,8 +5,10 @@ import "react-table/react-table.css";
 import numeral from "numeral";
 import Paper from "material-ui/Paper";
 import TextField from "material-ui/TextField";
-import AutoComplete from "material-ui/AutoComplete";
+import FloatingActionButton from "material-ui/FloatingActionButton";
 import moment from "moment";
+import IconButton from "material-ui/IconButton";
+import ContentAdd from "material-ui/svg-icons/content/add";
 
 import "./Landing.css";
 
@@ -48,7 +50,7 @@ export default class Landing extends Component {
         Header: "Symbol",
         accessor: "symbol",
         headerClassName: "pink",
-        fontWeight: "bold",
+        className: "bold",
 
         Cell: row => <div>{row.value}</div>
       },
@@ -94,8 +96,19 @@ export default class Landing extends Component {
         },
 
         Cell: row => (
-          <div style={{ color: row.value > 0 ? "green" : "red" }}>
+          <div
+            style={{ color: row.value > 0 ? "green" : "red" }}
+            className="buttons"
+          >
             {numeral(row.value).format("0.00") + " %"}
+            <div>
+              {/* <IconButton >
+                <ContentAdd  />
+              </IconButton> */}
+              <FloatingActionButton mini>
+                <ContentAdd />
+              </FloatingActionButton>
+            </div>
           </div>
         )
       }
@@ -103,22 +116,14 @@ export default class Landing extends Component {
 
     return (
       <div className="coin-header">
-        {/* <Paper
-          style={{
-            minWidth: "70%"
-          }}
-        > */}
         <div className="search">
           <TextField
             hintText="Filter Coins"
-            floatingLabelText="Search"
+            floatingLabelText={<i className="fa fa-search" />}
             type="search"
-            // filter={AutoComplete.caseInsensitiveFilter}
             data={this.state.search}
             onChange={e => this.setState({ search: e.target.value })}
           />
-          <i className="fa fa-search"</i>
-          
           Crypto Price Watch
         </div>
         {/* </Paper> */}

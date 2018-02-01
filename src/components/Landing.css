@@ -1,9 +1,18 @@
 .pink {
   color: #00bcd4;
   font-family: "Roboto", sans-serif;
-  /* font-weight: regular; */
+  /* font-weight: bold; */
   /* max-width: 12%; */
   height: 4vh;
+}
+.bold {
+  font-weight: bold;
+  color: #00bcd4;
+}
+.buttons {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 .search {
   margin-left: 2vh;
