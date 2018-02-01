@@ -128,9 +128,9 @@ export default class Landing extends Component {
         </div>
         {/* </Paper> */}
         <Paper
-          style={{
-            minWidth: "70%"
-          }}
+        // style={{
+        //   minWidth: "70%"
+        // }}
         >
           <ReactTable
             data={data}
