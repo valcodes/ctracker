@@ -1,11 +1,13 @@
+require("dotenv").config();
 const express = require("express");
+
 const { json } = require("body-parser");
 const cors = require("cors");
 const massive = require("massive");
 const axios = require("axios");
 const session = require("express-session");
 const passport = require("passport");
-require("dotenv").config();
+
 const Auth0Strategy = require("passport-auth0");
 const controller = require("./controller");
 
@@ -44,7 +46,7 @@ passport.use(
     function(accessToken, refreshToken, extraParams, profile, done) {
       app
         .get("db")
-        .getUserByAuthId(profile.id)
+        .getUserByAuth([profile.id])
         .then(response => {
           if (!response[0]) {
             app
@@ -60,13 +62,30 @@ passport.use(
     }
   )
 );
-
 passport.serializeUser(function(user, done) {
   done(null, user);
 });
 
 passport.deserializeUser(function(obj, done) {
   done(null, obj);
+});
+app.get(
+  "/login",
+  passport.authenticate("auth0", {
+    successRedirect: process.env.SUCCESS_REDIRECT,
+    failureRedirect: process.env.FAILURE_REDIRECT,
+    failureFlash: true
+  })
+);
+
+app.get("/api/logout", (req, res) => {
+  req.logout();
+  res.redirect("/");
+});
+
+app.get("/api/me", function(req, res) {
+  if (!req.user) return res.status(404);
+  res.status(200).json(req.user);
 });
 
 app.get("/api/getcoins", (req, res, next) => {
@@ -78,6 +97,12 @@ app.get("/api/getcoins", (req, res, next) => {
     .catch(console.log);
 });
 
+app.post("/api/portfolio", controller.create);
+
+// const path = require("path");
+// app.get("*", (req, res) => {
+//   res.sendFile(path.join(__dirname, "../build/index.html"));
+// });
 app.listen(port, () => {
   console.log(`Listening on ${port}`);
 });
