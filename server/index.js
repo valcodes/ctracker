@@ -97,12 +97,26 @@ app.get("/api/getcoins", (req, res, next) => {
     .catch(console.log);
 });
 
-app.post("/api/portfolio", controller.create);
+app.get("/api/getSingleCoin/:id", (req, res, next) => {
+  axios
+    .get(`https://api.coinmarketcap.com/v1/ticker/${req.params.id}`)
+    .then(response => {
+      console.log(response);
+      return res.send(response.data);
+    })
+    .catch(console.log);
+});
 
-// const path = require("path");
-// app.get("*", (req, res) => {
-//   res.sendFile(path.join(__dirname, "../build/index.html"));
-// });
+app.post("/api/portfolio", controller.create);
+app.get("/api/favorites", controller.getFavs);
+
+const path = require("path");
+
+app.get("*", (req, res) => {
+  // res.sendFile(path.join(__dirname, "../build/index.html"));
+  res.sendFile(path.join(__dirname, "./index.js"));
+});
+
 app.listen(port, () => {
   console.log(`Listening on ${port}`);
 });

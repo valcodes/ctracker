@@ -17,9 +17,20 @@ export default class Landing extends Component {
     super(props);
     this.state = {
       coins: [],
-      search: []
+      search: [],
+      userid: []
     };
+    this.addToPortfolio = this.addToPortfolio.bind(this);
   }
+  addToPortfolio = coin => {
+    axios
+      .post("/api/portfolio", {
+        userid: this.state.userid,
+        coinid: coin
+      })
+      .then(response => alert(` ${coin.toUpperCase()} added to portfolio`));
+  };
+
   componentDidMount() {
     axios
       .get("http://localhost:3001/api/getcoins")
@@ -29,6 +40,12 @@ export default class Landing extends Component {
         });
       })
       .catch(console.log);
+
+    axios.get("/api/me").then(response => {
+      console.log(response);
+      if (!response.data) this.setState({ userid: null });
+      else this.setState({ userid: response.data.id });
+    });
   }
 
   render() {
@@ -126,12 +143,8 @@ export default class Landing extends Component {
           />
           Crypto Price Watch
         </div>
-        {/* </Paper> */}
-        <Paper
-        // style={{
-        //   minWidth: "70%"
-        // }}
-        >
+
+        <Paper>
           <ReactTable
             data={data}
             columns={columns}
@@ -140,14 +153,15 @@ export default class Landing extends Component {
             className="-highlight "
             style={{
               fontSize: ".7em"
-              // minWidth: "65%"
             }}
             defaultPageSize={50}
             paginationStyle={{ backgroundColor: "#00bcd4", color: "white" }}
             getTdProps={(state, rowInfo, column, instance) => {
               return {
-                onClick: e => {
-                  console.log(rowInfo.original.id);
+                // onClick: e => {
+                //   console.log(rowInfo.original.id);
+                onClick: () => {
+                  this.addToPortfolio(rowInfo.original.id);
                 }
               };
             }}
