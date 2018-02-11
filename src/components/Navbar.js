@@ -7,6 +7,7 @@ import AppBar from "material-ui/AppBar";
 import IconMenu from "material-ui/IconMenu";
 import IconButton from "material-ui/IconButton";
 import axios from "axios";
+import Drawer from "material-ui/Drawer";
 import "./Navbar.css";
 
 export default class Navbar extends Component {
@@ -18,16 +19,20 @@ export default class Navbar extends Component {
       userid: []
     };
     this.handleLogin = this.handleLogin.bind(this);
+    this.handleClose = this.handleClose.bind(this);
   }
 
   handleLogin() {
     // window.location.href = "/login";
+
     window.location.href = "http://localhost:3001/login";
   }
 
+  handleClose = () => this.setState({ open: false });
+
   componentDidMount() {
     axios.get("/api/me").then(response => {
-      console.log(response);
+      // console.log(response);
       if (!response.data) this.setState({ userid: null });
       else
         this.setState({ userid: response.data.id, name: response.data.name });
@@ -35,7 +40,7 @@ export default class Navbar extends Component {
   }
 
   render() {
-    console.log(this.state.name);
+    // console.log(this.state.name);
     return (
       <div className="nav">
         <AppBar
@@ -47,28 +52,37 @@ export default class Navbar extends Component {
             <ListItem>
               {this.state.name === "" ? (
                 <FlatButton
+                  style={{ color: "white" }}
                   label="Login"
                   onClick={() => {
                     this.handleLogin();
                   }}
                 />
               ) : (
-                <FlatButton label="Log Out" href="/api/logout" />
+                <FlatButton
+                  label="Log Out"
+                  href="/api/logout"
+                  style={{ color: "white" }}
+                />
               )}
             </ListItem>
           }
         />
-        <IconMenu
+        <Drawer
           open={this.state.open}
+          docked={false}
+          onRequestChange={open => this.setState({ open })}
           iconButtonElement={<IconButton />}
-          anchorOrigin={{ horizontal: "left", vertical: "top" }}
-          targetOrigin={{ horizontal: "left", vertical: "top" }}
         >
-          <MenuItem primaryText="Home" />
-          <MenuItem primaryText="Portfolio" />
+          <MenuItem primaryText="Home" onClick={this.handleClose} href="/" />
+          <MenuItem
+            primaryText="Portfolio"
+            onClick={this.handleClose}
+            href="portfolio"
+          />
 
-          <MenuItem primaryText="Sign out" />
-        </IconMenu>
+          <MenuItem primaryText="Sign out" onClick={this.handleClose} />
+        </Drawer>
       </div>
     );
   }
