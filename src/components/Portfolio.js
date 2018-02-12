@@ -20,6 +20,7 @@ export default class Portfolio extends Component {
       userid: [],
       coinid: []
     };
+    // this.getCoin = this.getCoin.bind(this);
   }
 
   componentDidMount() {
@@ -29,29 +30,45 @@ export default class Portfolio extends Component {
     });
 
     axios.get("/api/favorites").then(response => {
-      this.setState({ coinid: response.data[0] });
-    });
+      // this.setState({ coinid: response.data[0].array_agg });
+      response.data[0].array_agg.forEach(element => {
+        // console.log(element);
+        axios
+          .get(`/api/getSingleCoin/${element}`)
+          .then(response => {
+            let coinArr = [];
 
-    for (let i = 0; i < this.state.coinid.length; i++) {
-      let id = [];
-      id = +this.state.coinid[i];
-      console.log(id);
-      axios.get(`/api/getSingleCoin/${id}`).then(response => {
-        console.log(response);
-        this.setState({ coins: response.data });
+            if (response) {
+              // console.log(response.data[0]);
+              // response.data[0].forEach(element => {
+              coinArr.push(response.data[0]);
+              // });
+              // coinArr.push(response.data[0]);
+              // console.log(coinArr);
+              Promise.all(coinArr).then(function(result) {
+                console.log(result);
+              });
+            }
+
+            // console.log(coinArr);
+
+            // return this.setState({ coins: coinArr });
+          })
+          .catch(console.log);
       });
-    }
-
-    // axios.get("/api/favorites").then(response => {
-    //   return response.data[0]
-    //     .map(coin => {
-    //       axios.get(`/api/getSingleCoin/${coin}`);
-    //     })
-    //     .then(response => {
-    //       this.setState({ coins: response.data });
-    //     });
-    // });
+    });
   }
+
+  // coinid.forEach((element)=>{console.log(element)})
+  // getCoin(id) {
+  //   axios
+  //     .get(`/api/getSingleCoin/${id}`)
+  //     .then(response => {
+  //       console.log(response);
+  //       this.setState({ coins: response.data });
+  //     })
+  //     .catch(console.log);
+  // }
 
   render() {
     console.log(this.state.coins);
@@ -105,10 +122,7 @@ export default class Portfolio extends Component {
         },
         Cell: row => <div>{numeral(row.value).format("$0,0.0000")}</div>
       },
-      // {
-      //   Header: "Date",
-      //   Cell: moment().format("l")
-      // },
+
       {
         Header: "24h Change",
         headerClassName: "pink",
