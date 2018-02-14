@@ -6,8 +6,8 @@ import numeral from "numeral";
 import Paper from "material-ui/Paper";
 import TextField from "material-ui/TextField";
 import FloatingActionButton from "material-ui/FloatingActionButton";
-import moment from "moment";
-import IconButton from "material-ui/IconButton";
+// import moment from "moment";
+// import IconButton from "material-ui/IconButton";
 import ContentAdd from "material-ui/svg-icons/content/add";
 
 import "./Landing.css";
@@ -30,45 +30,54 @@ export default class Portfolio extends Component {
     });
 
     axios.get("/api/favorites").then(response => {
-      // this.setState({ coinid: response.data[0].array_agg });
-      response.data[0].array_agg.forEach(element => {
-        // console.log(element);
-        axios
-          .get(`/api/getSingleCoin/${element}`)
-          .then(response => {
-            let coinArr = [];
+      let promiseArr = response.data[0].array_agg.map(element =>
+        axios.get(`/api/getSingleCoin/${element}`)
+      );
+      Promise.all(promiseArr)
+        .then(response => {
+          console.log(response);
+          response.map(element => console.log(element.data[0]));
+          // this.setState({ coins: response });
+          // let coinArr = [];
+          // console.log(response);
 
-            if (response) {
-              // console.log(response.data[0]);
-              // response.data[0].forEach(element => {
-              coinArr.push(response.data[0]);
-              // });
-              // coinArr.push(response.data[0]);
-              // console.log(coinArr);
-              Promise.all(coinArr).then(function(result) {
-                console.log(result);
-              });
-            }
+          // for (let i = 0; i < response.data.length; i++) {
+          //   coinArr = response.data.concat(response.data[i]);
+          // }
+          // coinArr.push(response.data[0]);
+          // console.log(coinArr);
 
-            // console.log(coinArr);
+          // data received from coinmarketcap.com api
+        })
 
-            // return this.setState({ coins: coinArr });
-          })
-          .catch(console.log);
-      });
+        .catch(console.log);
     });
-  }
 
-  // coinid.forEach((element)=>{console.log(element)})
-  // getCoin(id) {
-  //   axios
-  //     .get(`/api/getSingleCoin/${id}`)
-  //     .then(response => {
-  //       console.log(response);
-  //       this.setState({ coins: response.data });
-  //     })
-  //     .catch(console.log);
-  // }
+    // axios.get("/api/favorites").then(response => {
+    //   // getting coin ids from favorites and using them to get live data from the following api call
+
+    //   response.data[0].array_agg.forEach(element => {
+    //     axios
+    //       .all([axios.get(`/api/getSingleCoin/${element}`)])
+
+    //       .then(
+    //         axios.spread(response => {
+    //           let coinArr = [];
+    //           // console.log(response);
+
+    //           // for (let i = 0; i < response.data.length; i++) {
+    //           //   coinArr = response.data.concat(response.data[i]);
+    //           // }
+    //           coinArr.push(response.data[0]);
+    //           console.log(coinArr);
+
+    //           // data received from coinmarketcap.com api
+    //         })
+    //       )
+    //       .catch(console.log);
+    //   });
+    // });
+  }
 
   render() {
     console.log(this.state.coins);
