@@ -36,18 +36,9 @@ export default class Portfolio extends Component {
       Promise.all(promiseArr)
         .then(response => {
           console.log(response);
-          response.map(element => console.log(element.data[0]));
-          // this.setState({ coins: response });
-          // let coinArr = [];
-          // console.log(response);
-
-          // for (let i = 0; i < response.data.length; i++) {
-          //   coinArr = response.data.concat(response.data[i]);
-          // }
-          // coinArr.push(response.data[0]);
-          // console.log(coinArr);
-
-          // data received from coinmarketcap.com api
+          const coinArr = response.map(element => element.data[0]);
+          console.log(coinArr);
+          this.setState({ coins: coinArr });
         })
 
         .catch(console.log);
