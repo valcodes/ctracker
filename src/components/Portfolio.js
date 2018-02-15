@@ -58,7 +58,8 @@ export default class Portfolio extends Component {
         this.setState({
           coins: newPortfolio
         });
-      });
+      })
+      .catch(console.log);
     // axios
     //   .delete("/api/deleteCoin", {
     //     coinid: coin,
@@ -138,9 +139,6 @@ export default class Portfolio extends Component {
           >
             {numeral(row.value).format("0.00") + " %"}
             <div>
-              {/* <IconButton >
-                <ContentAdd  />
-              </IconButton> */}
               <FloatingActionButton mini secondary>
                 <ContentClear />
               </FloatingActionButton>
@@ -160,7 +158,7 @@ export default class Portfolio extends Component {
             data={this.state.search}
             onChange={e => this.setState({ search: e.target.value })}
           />
-          Crypto Price Watch
+          Portfolio
         </div>
 
         <Paper>

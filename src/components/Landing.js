@@ -50,7 +50,7 @@ export default class Landing extends Component {
 
   render() {
     let data = this.state.coins;
-    console.log(data);
+    console.log(this.state.userid);
     if (this.state.search) {
       data = data.filter(row => {
         return (
@@ -117,15 +117,21 @@ export default class Landing extends Component {
             style={{ color: row.value > 0 ? "green" : "red" }}
             className="buttons"
           >
-            {numeral(row.value).format("0.00") + " %"}
-            <div>
-              {/* <IconButton >
-                <ContentAdd  />
-              </IconButton> */}
-              <FloatingActionButton mini>
-                <ContentAdd />
-              </FloatingActionButton>
-            </div>
+            {this.state.userid === null ? (
+              <div className="buttons">
+                {numeral(row.value).format("0.00") + " %"}
+              </div>
+            ) : (
+              <div className="buttons">
+                {numeral(row.value).format("0.00") + " %"}
+
+                <div>
+                  <FloatingActionButton mini>
+                    <ContentAdd />
+                  </FloatingActionButton>
+                </div>
+              </div>
+            )}
           </div>
         )
       }
@@ -158,8 +164,6 @@ export default class Landing extends Component {
             paginationStyle={{ backgroundColor: "#00bcd4", color: "white" }}
             getTdProps={(state, rowInfo, column, instance) => {
               return {
-                // onClick: e => {
-                //   console.log(rowInfo.original.id);
                 onClick: () => {
                   this.addToPortfolio(rowInfo.original.id);
                 }
