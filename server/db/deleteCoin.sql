@@ -1,0 +1,1 @@
+DELETE FROM portfolio where coinid=1$ and userid=$2
