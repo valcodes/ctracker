@@ -8,7 +8,7 @@ import TextField from "material-ui/TextField";
 import FloatingActionButton from "material-ui/FloatingActionButton";
 // import moment from "moment";
 // import IconButton from "material-ui/IconButton";
-import ContentAdd from "material-ui/svg-icons/content/add";
+import ContentClear from "material-ui/svg-icons/content/clear";
 
 import "./Landing.css";
 export default class Portfolio extends Component {
@@ -20,7 +20,7 @@ export default class Portfolio extends Component {
       userid: [],
       coinid: []
     };
-    // this.getCoin = this.getCoin.bind(this);
+    this.removefromPortfolio = this.removeFromPortfolio.bind(this);
   }
 
   componentDidMount() {
@@ -30,50 +30,49 @@ export default class Portfolio extends Component {
     });
 
     axios.get("/api/favorites").then(response => {
+      // getting coin id array from favorites saved in db on the server
       let promiseArr = response.data[0].array_agg.map(element =>
+        // mapping through said array and sending  axios get requests for each coin to third party api to get live price data
         axios.get(`/api/getSingleCoin/${element}`)
       );
       Promise.all(promiseArr)
+        // had to use promise.all to get all the data from multiple api calls in same place
         .then(response => {
-          console.log(response);
           const coinArr = response.map(element => element.data[0]);
-          console.log(coinArr);
           this.setState({ coins: coinArr });
         })
-
         .catch(console.log);
     });
-
-    // axios.get("/api/favorites").then(response => {
-    //   // getting coin ids from favorites and using them to get live data from the following api call
-
-    //   response.data[0].array_agg.forEach(element => {
-    //     axios
-    //       .all([axios.get(`/api/getSingleCoin/${element}`)])
-
-    //       .then(
-    //         axios.spread(response => {
-    //           let coinArr = [];
-    //           // console.log(response);
-
-    //           // for (let i = 0; i < response.data.length; i++) {
-    //           //   coinArr = response.data.concat(response.data[i]);
-    //           // }
-    //           coinArr.push(response.data[0]);
-    //           console.log(coinArr);
-
-    //           // data received from coinmarketcap.com api
-    //         })
-    //       )
-    //       .catch(console.log);
-    //   });
-    // });
   }
-
+  removeFromPortfolio = coin => {
+    axios
+      .delete(
+        `http://localhost:3001/api/deleteCoin?coinid=${coin}&userid=${
+          this.state.userid
+        }`
+      )
+      .then(response => {
+        console.log(response);
+        const newPortfolio = this.state.coins;
+        newPortfolio.splice(newPortfolio.indexOf(coin), 1);
+        this.setState({
+          coins: newPortfolio
+        });
+      });
+    // axios
+    //   .delete("/api/deleteCoin", {
+    //     coinid: coin,
+    //     userid: this.state.userid
+    //   })
+    //   .then(
+    //     response => console.log(response)
+    //     // alert(` ${coin.toUpperCase()} deleted from portfolio`)
+    //   )
+    //   .catch(console.log);
+  };
   render() {
-    console.log(this.state.coins);
     let data = this.state.coins;
-    // console.log(data);
+
     if (this.state.search) {
       data = data.filter(row => {
         return (
@@ -142,8 +141,8 @@ export default class Portfolio extends Component {
               {/* <IconButton >
                 <ContentAdd  />
               </IconButton> */}
-              <FloatingActionButton mini>
-                <ContentAdd />
+              <FloatingActionButton mini secondary>
+                <ContentClear />
               </FloatingActionButton>
             </div>
           </div>
@@ -178,10 +177,10 @@ export default class Portfolio extends Component {
             paginationStyle={{ backgroundColor: "#00bcd4", color: "white" }}
             getTdProps={(state, rowInfo, column, instance) => {
               return {
-                // onClick: e => {
+                // // onClick: e => {
                 //   console.log(rowInfo.original.id);
                 onClick: () => {
-                  this.addToPortfolio(rowInfo.original.id);
+                  this.removeFromPortfolio(rowInfo.original.id);
                 }
               };
             }}

@@ -101,7 +101,6 @@ app.get("/api/getSingleCoin/:id", (req, res, next) => {
   axios
     .get(`https://api.coinmarketcap.com/v1/ticker/${req.params.id}`)
     .then(response => {
-      console.log(response);
       return res.send(response.data);
     })
     .catch(console.log);
@@ -109,6 +108,7 @@ app.get("/api/getSingleCoin/:id", (req, res, next) => {
 
 app.post("/api/portfolio", controller.create);
 app.get("/api/favorites", controller.getFavs);
+app.delete("/api/deleteCoin", controller.deleteFromPortfolio);
 
 const path = require("path");
 
