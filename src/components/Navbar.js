@@ -38,7 +38,6 @@ export default class Navbar extends Component {
 
   componentDidMount() {
     axios.get("/api/me").then(response => {
-      console.log(response);
       if (!response.data) this.setState({ userid: null });
       else
         this.setState({ userid: response.data.id, name: response.data.name });

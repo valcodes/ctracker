@@ -50,7 +50,7 @@ export default class Landing extends Component {
 
   render() {
     let data = this.state.coins;
-    console.log(this.state.userid);
+
     if (this.state.search) {
       data = data.filter(row => {
         return (
@@ -116,16 +116,12 @@ export default class Landing extends Component {
         Cell: row => (
           <div style={{ color: row.value > 0 ? "green" : "red" }}>
             {this.state.userid === null ? (
-              <div className="noclick">
-                {numeral(row.value).format("0.00") + " %"}
-              </div>
+              <div>{numeral(row.value).format("0.00") + " %"}</div>
             ) : (
               <div className="buttons">
-                <div className="noclick">
-                  {numeral(row.value).format("0.00") + " %"}
-                </div>
+                <div>{numeral(row.value).format("0.00") + " %"}</div>
 
-                <div id="clickme">
+                <div>
                   <FloatingActionButton mini>
                     <ContentAdd />
                   </FloatingActionButton>
@@ -164,14 +160,10 @@ export default class Landing extends Component {
             paginationStyle={{ backgroundColor: "#00bcd4", color: "white" }}
             getTdProps={(state, rowInfo, column, instance) => {
               return {
-                onClick: e => {
-                  var div = document.getElementById("clickme");
-                  e.stopPropagation();
-                  if (column.Header === "24h Change" && div) {
-                    // this.addToPortfolio(rowInfo.original.id);
-
-                    console.log("yep");
-                  } else console.log("nop");
+                onClick: () => {
+                  if (column.Header === "24h Change") {
+                    this.addToPortfolio(rowInfo.original.id);
+                  }
                 }
               };
             }}
