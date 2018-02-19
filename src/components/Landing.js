@@ -77,6 +77,7 @@ export default class Landing extends Component {
         accessor: "name",
 
         className: "coin-name",
+
         Cell: row => <div>{row.value}</div>
       },
       {
@@ -113,19 +114,18 @@ export default class Landing extends Component {
         },
 
         Cell: row => (
-          <div
-            style={{ color: row.value > 0 ? "green" : "red" }}
-            className="buttons"
-          >
+          <div style={{ color: row.value > 0 ? "green" : "red" }}>
             {this.state.userid === null ? (
-              <div className="buttons">
+              <div className="noclick">
                 {numeral(row.value).format("0.00") + " %"}
               </div>
             ) : (
               <div className="buttons">
-                {numeral(row.value).format("0.00") + " %"}
+                <div className="noclick">
+                  {numeral(row.value).format("0.00") + " %"}
+                </div>
 
-                <div>
+                <div id="clickme">
                   <FloatingActionButton mini>
                     <ContentAdd />
                   </FloatingActionButton>
@@ -164,8 +164,14 @@ export default class Landing extends Component {
             paginationStyle={{ backgroundColor: "#00bcd4", color: "white" }}
             getTdProps={(state, rowInfo, column, instance) => {
               return {
-                onClick: () => {
-                  this.addToPortfolio(rowInfo.original.id);
+                onClick: e => {
+                  var div = document.getElementById("clickme");
+                  e.stopPropagation();
+                  if (column.Header === "24h Change" && div) {
+                    // this.addToPortfolio(rowInfo.original.id);
+
+                    console.log("yep");
+                  } else console.log("nop");
                 }
               };
             }}

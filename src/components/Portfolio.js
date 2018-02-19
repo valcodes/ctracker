@@ -58,6 +58,7 @@ export default class Portfolio extends Component {
         this.setState({
           coins: newPortfolio
         });
+        alert(` ${coin.toUpperCase()} deleted from portfolio`);
       })
       .catch(console.log);
     // axios
