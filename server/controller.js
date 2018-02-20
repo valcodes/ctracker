@@ -17,10 +17,10 @@ module.exports = {
   },
   deleteFromPortfolio: (req, res, next) => {
     const db = req.app.get("db");
-    const { query } = req;
-    console.log(req.query);
+    const { coinid, userid } = req.query;
+    console.log(coinid, userid);
     db
-      .deleteCoin([query.coinid, query.userid])
+      .deleteCoin([coinid, userid])
       .then(portfolio => res.status(200).send(portfolio))
       .catch(() => res.status(500).send());
   }

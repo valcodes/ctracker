@@ -50,7 +50,7 @@ export default class Landing extends Component {
 
   render() {
     let data = this.state.coins;
-    console.log(data);
+
     if (this.state.search) {
       data = data.filter(row => {
         return (
@@ -77,6 +77,7 @@ export default class Landing extends Component {
         accessor: "name",
 
         className: "coin-name",
+
         Cell: row => <div>{row.value}</div>
       },
       {
@@ -113,19 +114,20 @@ export default class Landing extends Component {
         },
 
         Cell: row => (
-          <div
-            style={{ color: row.value > 0 ? "green" : "red" }}
-            className="buttons"
-          >
-            {numeral(row.value).format("0.00") + " %"}
-            <div>
-              {/* <IconButton >
-                <ContentAdd  />
-              </IconButton> */}
-              <FloatingActionButton mini>
-                <ContentAdd />
-              </FloatingActionButton>
-            </div>
+          <div style={{ color: row.value > 0 ? "green" : "red" }}>
+            {this.state.userid === null ? (
+              <div>{numeral(row.value).format("0.00") + " %"}</div>
+            ) : (
+              <div className="buttons">
+                <div>{numeral(row.value).format("0.00") + " %"}</div>
+
+                <div>
+                  <FloatingActionButton mini>
+                    <ContentAdd />
+                  </FloatingActionButton>
+                </div>
+              </div>
+            )}
           </div>
         )
       }
@@ -158,10 +160,10 @@ export default class Landing extends Component {
             paginationStyle={{ backgroundColor: "#00bcd4", color: "white" }}
             getTdProps={(state, rowInfo, column, instance) => {
               return {
-                // onClick: e => {
-                //   console.log(rowInfo.original.id);
                 onClick: () => {
-                  this.addToPortfolio(rowInfo.original.id);
+                  if (column.Header === "24h Change") {
+                    this.addToPortfolio(rowInfo.original.id);
+                  }
                 }
               };
             }}

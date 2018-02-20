@@ -1,1 +1,1 @@
-DELETE FROM portfolio where coinid=1$ and userid=$2
+DELETE FROM portfolio WHERE coinid =$1 AND userid =$2

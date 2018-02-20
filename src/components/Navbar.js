@@ -19,6 +19,7 @@ export default class Navbar extends Component {
       userid: []
     };
     this.handleLogin = this.handleLogin.bind(this);
+    this.handleLogout = this.handleLogout.bind(this);
     this.handleClose = this.handleClose.bind(this);
   }
 
@@ -28,11 +29,15 @@ export default class Navbar extends Component {
     window.location.href = "http://localhost:3001/login";
   }
 
+  handleLogout() {
+    axios.get("/logout").then(response => response.data);
+    window.location.href = "/";
+  }
+
   handleClose = () => this.setState({ open: false });
 
   componentDidMount() {
     axios.get("/api/me").then(response => {
-      // console.log(response);
       if (!response.data) this.setState({ userid: null });
       else
         this.setState({ userid: response.data.id, name: response.data.name });
@@ -60,8 +65,8 @@ export default class Navbar extends Component {
                 />
               ) : (
                 <FlatButton
-                  label="Log Out"
-                  href="/api/logout"
+                  label={"Hey," + "  " + this.state.name}
+                  href="/logout"
                   style={{ color: "white" }}
                 />
               )}
@@ -81,7 +86,11 @@ export default class Navbar extends Component {
             href="portfolio"
           />
 
-          <MenuItem primaryText="Sign out" onClick={this.handleClose} />
+          <MenuItem
+            primaryText="Sign out"
+            onClick={() => this.handleLogout()}
+            // href="/logout"
+          />
         </Drawer>
       </div>
     );

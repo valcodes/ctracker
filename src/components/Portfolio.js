@@ -52,26 +52,23 @@ export default class Portfolio extends Component {
         }`
       )
       .then(response => {
-        console.log(response);
         const newPortfolio = this.state.coins;
-        newPortfolio.splice(newPortfolio.indexOf(coin), 1);
+        console.log(newPortfolio.indexOf(coin));
+        for (let i = 0; i < newPortfolio.length; i++) {
+          console.log(coin[i]);
+          newPortfolio.splice(newPortfolio.indexOf(coin[i]), coin[i + 1]);
+        }
+        // newPortfolio.splice(newPortfolio.indexOf(coin), 1);
         this.setState({
           coins: newPortfolio
         });
-      });
-    // axios
-    //   .delete("/api/deleteCoin", {
-    //     coinid: coin,
-    //     userid: this.state.userid
-    //   })
-    //   .then(
-    //     response => console.log(response)
-    //     // alert(` ${coin.toUpperCase()} deleted from portfolio`)
-    //   )
-    //   .catch(console.log);
+        alert(` ${coin.toUpperCase()} deleted from portfolio`);
+      })
+      .catch(console.log);
   };
   render() {
     let data = this.state.coins;
+    console.log(this.state.coins);
 
     if (this.state.search) {
       data = data.filter(row => {
@@ -138,9 +135,6 @@ export default class Portfolio extends Component {
           >
             {numeral(row.value).format("0.00") + " %"}
             <div>
-              {/* <IconButton >
-                <ContentAdd  />
-              </IconButton> */}
               <FloatingActionButton mini secondary>
                 <ContentClear />
               </FloatingActionButton>
@@ -160,7 +154,7 @@ export default class Portfolio extends Component {
             data={this.state.search}
             onChange={e => this.setState({ search: e.target.value })}
           />
-          Crypto Price Watch
+          Portfolio
         </div>
 
         <Paper>
@@ -177,10 +171,10 @@ export default class Portfolio extends Component {
             paginationStyle={{ backgroundColor: "#00bcd4", color: "white" }}
             getTdProps={(state, rowInfo, column, instance) => {
               return {
-                // // onClick: e => {
-                //   console.log(rowInfo.original.id);
                 onClick: () => {
-                  this.removeFromPortfolio(rowInfo.original.id);
+                  if (column.Header === "24h Change") {
+                    this.removeFromPortfolio(rowInfo.original.id);
+                  }
                 }
               };
             }}
