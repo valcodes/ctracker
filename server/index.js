@@ -41,7 +41,8 @@ passport.use(
       clientID: process.env.AUTH0_CLIENT_ID,
       clientSecret: process.env.AUTH0_CLIENT_SECRET,
 
-      callbackURL: process.env.AUTH0_CALLBACK_URL
+      callbackURL: process.env.AUTH0_CALLBACK_URL,
+      scope: "openid profile"
     },
     function(accessToken, refreshToken, extraParams, profile, done) {
       app
@@ -69,6 +70,11 @@ passport.serializeUser(function(user, done) {
 passport.deserializeUser(function(obj, done) {
   done(null, obj);
 });
+
+app.get("/api/me", function(req, res) {
+  if (!req.user) return res.status(404);
+  res.status(200).json(req.user);
+});
 app.get(
   "/login",
   passport.authenticate("auth0", {
@@ -81,11 +87,6 @@ app.get(
 app.get("/logout", (req, res) => {
   req.logout();
   res.redirect("/");
-});
-
-app.get("/api/me", function(req, res) {
-  if (!req.user) return res.status(404);
-  res.status(200).json(req.user);
 });
 
 app.get("/api/getcoins", (req, res, next) => {

@@ -7,7 +7,7 @@ import Paper from "material-ui/Paper";
 import TextField from "material-ui/TextField";
 import FloatingActionButton from "material-ui/FloatingActionButton";
 // import moment from "moment";
-// import IconButton from "material-ui/IconButton";
+import Snackbar from "material-ui/Snackbar";
 import ContentClear from "material-ui/svg-icons/content/clear";
 
 import "./Landing.css";
@@ -18,13 +18,15 @@ export default class Portfolio extends Component {
       coins: [],
       search: [],
       userid: [],
-      coinid: []
+      coinid: [],
+      open: false
     };
     this.removefromPortfolio = this.removeFromPortfolio.bind(this);
   }
 
   componentDidMount() {
     axios.get("/api/me").then(response => {
+      console.log(response);
       if (!response.data) this.setState({ userid: null });
       else this.setState({ userid: response.data.id });
     });
@@ -36,7 +38,7 @@ export default class Portfolio extends Component {
         axios.get(`/api/getSingleCoin/${element}`)
       );
       Promise.all(promiseArr)
-        // had to use promise.all to get all the data from multiple api calls in same place
+        // using promise.all to get all the data from multiple api calls in same place
         .then(response => {
           const coinArr = response.map(element => element.data[0]);
           this.setState({ coins: coinArr });
@@ -60,9 +62,10 @@ export default class Portfolio extends Component {
         }
         // newPortfolio.splice(newPortfolio.indexOf(coin), 1);
         this.setState({
-          coins: newPortfolio
+          coins: newPortfolio,
+          open: true,
+          coin: coin.toUpperCase()
         });
-        alert(` ${coin.toUpperCase()} deleted from portfolio`);
       })
       .catch(console.log);
   };
@@ -138,6 +141,11 @@ export default class Portfolio extends Component {
               <FloatingActionButton mini secondary>
                 <ContentClear />
               </FloatingActionButton>
+              <Snackbar
+                open={this.state.open}
+                message={this.state.coin + "  deleted from portfolio"}
+                autoHideDuration={3000}
+              />
             </div>
           </div>
         )

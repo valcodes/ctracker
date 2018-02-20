@@ -9,7 +9,7 @@ import FloatingActionButton from "material-ui/FloatingActionButton";
 import moment from "moment";
 import IconButton from "material-ui/IconButton";
 import ContentAdd from "material-ui/svg-icons/content/add";
-
+import Snackbar from "material-ui/Snackbar";
 import "./Landing.css";
 
 export default class Landing extends Component {
@@ -18,7 +18,9 @@ export default class Landing extends Component {
     this.state = {
       coins: [],
       search: [],
-      userid: []
+      userid: [],
+      coin: [],
+      open: false
     };
     this.addToPortfolio = this.addToPortfolio.bind(this);
   }
@@ -28,10 +30,23 @@ export default class Landing extends Component {
         userid: this.state.userid,
         coinid: coin
       })
-      .then(response => alert(` ${coin.toUpperCase()} added to portfolio`));
+      .then(response =>
+        this.setState({ open: true, coin: coin.toUpperCase() })
+      );
   };
-
+  // componentWillMount() {
+  //   axios.get("/api/me").then(response => {
+  //     console.log(response);
+  //     if (!response.data) this.setState({ userid: null });
+  //     else this.setState({ userid: response.data.id });
+  //   });
+  // }
   componentDidMount() {
+    axios.get("/api/me").then(response => {
+      console.log(response.data);
+      if (!response.data) this.setState({ userid: null });
+      else this.setState({ userid: response.data.id });
+    });
     axios
       .get("http://localhost:3001/api/getcoins")
       .then(results => {
@@ -40,16 +55,11 @@ export default class Landing extends Component {
         });
       })
       .catch(console.log);
-
-    axios.get("/api/me").then(response => {
-      console.log(response);
-      if (!response.data) this.setState({ userid: null });
-      else this.setState({ userid: response.data.id });
-    });
   }
 
   render() {
     let data = this.state.coins;
+    console.log(this.state.userid);
 
     if (this.state.search) {
       data = data.filter(row => {
@@ -125,6 +135,19 @@ export default class Landing extends Component {
                   <FloatingActionButton mini>
                     <ContentAdd />
                   </FloatingActionButton>
+                  <Snackbar
+                    open={this.state.open}
+                    message={this.state.coin + "  added to portfolio"}
+                    autoHideDuration={3000}
+                    contentStyle={{
+                      backgroundColor: "#00bcd4",
+                      borderColor: "#00bcd4"
+                    }}
+                    bodyStyle={{
+                      backgroundColor: "#00bcd4",
+                      borderColor: "#00bcd4"
+                    }}
+                  />
                 </div>
               </div>
             )}
