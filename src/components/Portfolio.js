@@ -6,8 +6,10 @@ import numeral from "numeral";
 import Paper from "material-ui/Paper";
 import TextField from "material-ui/TextField";
 import FloatingActionButton from "material-ui/FloatingActionButton";
+import FlatButton from "material-ui/FlatButton";
 // import moment from "moment";
-// import IconButton from "material-ui/IconButton";
+import Dialog from "material-ui/Dialog";
+import Snackbar from "material-ui/Snackbar";
 import ContentClear from "material-ui/svg-icons/content/clear";
 
 import "./Landing.css";
@@ -17,38 +19,63 @@ export default class Portfolio extends Component {
     this.state = {
       coins: [],
       search: [],
-      userid: [],
-      coinid: []
+      authid: [],
+      coinid: [],
+      name: "",
+      open: false,
+      noCoinsDialog: false,
+      loginWarningDialog: false
     };
     this.removefromPortfolio = this.removeFromPortfolio.bind(this);
+    this.handleLogin = this.handleLogin.bind(this);
+    this.promptUserToLogin = this.promptUserToLogin.bind(this);
+  }
+  handleLogin() {
+    // window.location.href = "/login";
+
+    window.location.href = "http://localhost:3001/login";
   }
 
   componentDidMount() {
     axios.get("/api/me").then(response => {
-      if (!response.data) this.setState({ userid: null });
-      else this.setState({ userid: response.data.id });
+      console.log(response.data);
+      if (!response.data) this.setState({ authid: null });
+      else
+        this.setState({
+          authid: response.data.authid,
+          name: response.data.name
+        });
     });
 
     axios.get("/api/favorites").then(response => {
-      // getting coin id array from favorites saved in db on the server
-      let promiseArr = response.data[0].array_agg.map(element =>
-        // mapping through said array and sending  axios get requests for each coin to third party api to get live price data
-        axios.get(`/api/getSingleCoin/${element}`)
-      );
-      Promise.all(promiseArr)
-        // had to use promise.all to get all the data from multiple api calls in same place
-        .then(response => {
-          const coinArr = response.map(element => element.data[0]);
-          this.setState({ coins: coinArr });
-        })
-        .catch(console.log);
+      console.log(response);
+      if (response.data[0].array_agg === null) {
+        // displaying a popup if there are no coins in portfolio
+        this.setState({ noCoinsDialog: true });
+      } else {
+        // getting coin id array from favorites saved in db on the server
+        let promiseArr = response.data[0].array_agg.map(element =>
+          // mapping through said array and sending  axios get requests for each coin to third party api to get live price data
+          axios.get(`/api/getSingleCoin/${element}`)
+        );
+        Promise.all(promiseArr)
+          // using promise.all to get all the data from multiple api calls in same place
+          .then(response => {
+            const coinArr = response.map(element => element.data[0]);
+            this.setState({ coins: coinArr });
+          })
+          .catch(console.log);
+      }
     });
+    //using setTimeout as a workaround to avoid having both dialogs displayed at same time
+    setTimeout(this.promptUserToLogin, 2000);
   }
+
   removeFromPortfolio = coin => {
     axios
       .delete(
         `http://localhost:3001/api/deleteCoin?coinid=${coin}&userid=${
-          this.state.userid
+          this.state.authid
         }`
       )
       .then(response => {
@@ -60,15 +87,24 @@ export default class Portfolio extends Component {
         }
         // newPortfolio.splice(newPortfolio.indexOf(coin), 1);
         this.setState({
-          coins: newPortfolio
+          coins: newPortfolio,
+          open: true,
+          coin: coin.toUpperCase()
         });
-        alert(` ${coin.toUpperCase()} deleted from portfolio`);
       })
       .catch(console.log);
   };
+  promptUserToLogin() {
+    console.log(this.state.authid);
+    if (this.state.name == "") {
+      console.log("what");
+      return this.setState({ loginWarningDialog: true });
+    } else {
+      return this.setState({ loginWarningDialog: false });
+    }
+  }
   render() {
     let data = this.state.coins;
-    console.log(this.state.coins);
 
     if (this.state.search) {
       data = data.filter(row => {
@@ -138,6 +174,20 @@ export default class Portfolio extends Component {
               <FloatingActionButton mini secondary>
                 <ContentClear />
               </FloatingActionButton>
+
+              <Snackbar
+                open={this.state.open}
+                message={this.state.coin + "  deleted from portfolio"}
+                autoHideDuration={2000}
+                contentStyle={{
+                  backgroundColor: "#00bcd4",
+                  borderColor: "#00bcd4"
+                }}
+                bodyStyle={{
+                  backgroundColor: "#00bcd4",
+                  borderColor: "#00bcd4"
+                }}
+              />
             </div>
           </div>
         )
@@ -156,7 +206,43 @@ export default class Portfolio extends Component {
           />
           Portfolio
         </div>
-
+        <Dialog
+          title="You are not logged in!"
+          actions={
+            <div>
+              <FlatButton
+                label="Cancel"
+                primary={true}
+                onClick={() => this.setState({ loginWarningDialog: false })}
+              />
+              <FlatButton
+                label="login"
+                primary={true}
+                onClick={() => this.handleLogin()}
+              />
+            </div>
+          }
+          modal={false}
+          open={this.state.loginWarningDialog}
+          onRequestClose={() => this.setState({ loginWarningDialog: false })}
+        >
+          Please log in to view Portfolio
+        </Dialog>
+        <Dialog
+          title="You have no coins added to portfolio"
+          actions={
+            <FlatButton
+              label="Cancel"
+              primary={true}
+              onClick={() => this.setState({ noCoinsDialog: false })}
+            />
+          }
+          modal={false}
+          open={this.state.noCoinsDialog}
+          onRequestClose={() => this.setState({ noCoinsDialog: false })}
+        >
+          Track some cryptos! That lambo isn't going to buy itself!
+        </Dialog>
         <Paper>
           <ReactTable
             data={data}

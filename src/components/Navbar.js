@@ -38,9 +38,13 @@ export default class Navbar extends Component {
 
   componentDidMount() {
     axios.get("/api/me").then(response => {
+      console.log(response);
       if (!response.data) this.setState({ userid: null });
       else
-        this.setState({ userid: response.data.id, name: response.data.name });
+        this.setState({
+          userid: response.data.authid,
+          name: response.data.name
+        });
     });
   }
 
@@ -66,7 +70,6 @@ export default class Navbar extends Component {
               ) : (
                 <FlatButton
                   label={"Hey," + "  " + this.state.name}
-                  href="/logout"
                   style={{ color: "white" }}
                 />
               )}

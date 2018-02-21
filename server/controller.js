@@ -1,24 +1,24 @@
 module.exports = {
   create: (req, res, next) => {
     const db = req.app.get("db");
-    const { userid, coinid } = req.body;
+    const { authid, coinid } = req.body;
 
     db
-      .addCoin([userid, coinid])
+      .addCoin([authid, coinid])
       .then(portfolio => res.status(200).send(portfolio))
       .catch(err => res.status(500).send(err));
   },
   getFavs: (req, res, next) => {
     const db = req.app.get("db");
     db
-      .getFavorites([req.user.id])
+      .getFavorites([req.user.authid])
       .then(portfolio => res.status(200).send(portfolio))
       .catch(() => res.status(500).send());
   },
   deleteFromPortfolio: (req, res, next) => {
     const db = req.app.get("db");
     const { coinid, userid } = req.query;
-    console.log(coinid, userid);
+
     db
       .deleteCoin([coinid, userid])
       .then(portfolio => res.status(200).send(portfolio))
