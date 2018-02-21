@@ -75,6 +75,7 @@ app.get("/api/me", function(req, res) {
   if (!req.user) return res.status(404);
   res.status(200).json(req.user);
 });
+
 app.get(
   "/login",
   passport.authenticate("auth0", {

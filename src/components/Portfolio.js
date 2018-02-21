@@ -21,12 +21,14 @@ export default class Portfolio extends Component {
       search: [],
       authid: [],
       coinid: [],
+      name: "",
       open: false,
       noCoinsDialog: false,
       loginWarningDialog: false
     };
     this.removefromPortfolio = this.removeFromPortfolio.bind(this);
     this.handleLogin = this.handleLogin.bind(this);
+    this.promptUserToLogin = this.promptUserToLogin.bind(this);
   }
   handleLogin() {
     // window.location.href = "/login";
@@ -36,18 +38,14 @@ export default class Portfolio extends Component {
 
   componentDidMount() {
     axios.get("/api/me").then(response => {
-      console.log(response);
+      console.log(response.data);
       if (!response.data) this.setState({ authid: null });
-      else this.setState({ authid: response.data.authid });
+      else
+        this.setState({
+          authid: response.data.authid,
+          name: response.data.name
+        });
     });
-
-    console.log(this.state.authid);
-    if (this.state.authid.length == 0) {
-      console.log("what");
-      this.setState({ loginWarningDialog: true });
-    } else {
-      this.setState({ loginWarningDialog: false });
-    }
 
     axios.get("/api/favorites").then(response => {
       console.log(response);
@@ -69,7 +67,10 @@ export default class Portfolio extends Component {
           .catch(console.log);
       }
     });
+    //using setTimeout as a workaround to avoid having both dialogs displayed at same time
+    setTimeout(this.promptUserToLogin, 2000);
   }
+
   removeFromPortfolio = coin => {
     axios
       .delete(
@@ -93,6 +94,15 @@ export default class Portfolio extends Component {
       })
       .catch(console.log);
   };
+  promptUserToLogin() {
+    console.log(this.state.authid);
+    if (this.state.name == "") {
+      console.log("what");
+      return this.setState({ loginWarningDialog: true });
+    } else {
+      return this.setState({ loginWarningDialog: false });
+    }
+  }
   render() {
     let data = this.state.coins;
 
