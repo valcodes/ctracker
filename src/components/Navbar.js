@@ -42,7 +42,7 @@ export default class Navbar extends Component {
       if (!response.data) this.setState({ userid: null });
       else
         this.setState({
-          userid: response.data.id,
+          userid: response.data.authid,
           name: response.data.name
         });
     });

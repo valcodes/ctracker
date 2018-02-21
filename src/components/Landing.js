@@ -18,7 +18,8 @@ export default class Landing extends Component {
     this.state = {
       coins: [],
       search: [],
-      userid: [],
+      authid: [],
+      name: "",
       coin: [],
       open: false
     };
@@ -27,25 +28,23 @@ export default class Landing extends Component {
   addToPortfolio = coin => {
     axios
       .post("/api/portfolio", {
-        userid: this.state.userid,
+        authid: this.state.authid,
         coinid: coin
       })
       .then(response =>
         this.setState({ open: true, coin: coin.toUpperCase() })
       );
   };
-  // componentWillMount() {
-  //   axios.get("/api/me").then(response => {
-  //     console.log(response);
-  //     if (!response.data) this.setState({ userid: null });
-  //     else this.setState({ userid: response.data.id });
-  //   });
-  // }
+
   componentDidMount() {
     axios.get("/api/me").then(response => {
       console.log(response.data);
-      if (!response.data) this.setState({ userid: null });
-      else this.setState({ userid: response.data.id });
+      if (!response.data) this.setState({ authid: null });
+      else
+        this.setState({
+          authid: response.data.authid,
+          name: response.data.name
+        });
     });
     axios
       .get("http://localhost:3001/api/getcoins")
@@ -59,7 +58,7 @@ export default class Landing extends Component {
 
   render() {
     let data = this.state.coins;
-    console.log(this.state.userid);
+    console.log(this.state.authid);
 
     if (this.state.search) {
       data = data.filter(row => {
@@ -125,7 +124,7 @@ export default class Landing extends Component {
 
         Cell: row => (
           <div style={{ color: row.value > 0 ? "green" : "red" }}>
-            {this.state.userid === null ? (
+            {this.state.name === "" ? (
               <div>{numeral(row.value).format("0.00") + " %"}</div>
             ) : (
               <div className="buttons">
@@ -138,7 +137,7 @@ export default class Landing extends Component {
                   <Snackbar
                     open={this.state.open}
                     message={this.state.coin + "  added to portfolio"}
-                    autoHideDuration={3000}
+                    autoHideDuration={2000}
                     contentStyle={{
                       backgroundColor: "#00bcd4",
                       borderColor: "#00bcd4"

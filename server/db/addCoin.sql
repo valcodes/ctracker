@@ -1,1 +1,1 @@
-INSERT INTO portfolio (userid, coinid) values ($1, $2) RETURNING userid, coinid
+INSERT INTO portfolio (authid, coinid) values ($1, $2) RETURNING authid, coinid
