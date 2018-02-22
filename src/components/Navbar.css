@@ -1,5 +1,13 @@
 .nav {
-  width: 100%;
+  width: 100vw;
   height: auto;
   color: white;
+  display: flex;
+  justify-content: space-around;
+}
+
+@media (max-width: 780px) {
+  .nav {
+    width: 100vw;
+  }
 }

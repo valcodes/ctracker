@@ -4,7 +4,7 @@ import FlatButton from "material-ui/FlatButton";
 import ListItem from "material-ui/List/ListItem";
 import MenuItem from "material-ui/MenuItem";
 import AppBar from "material-ui/AppBar";
-import IconMenu from "material-ui/IconMenu";
+
 import IconButton from "material-ui/IconButton";
 import axios from "axios";
 import Drawer from "material-ui/Drawer";
@@ -38,7 +38,6 @@ export default class Navbar extends Component {
 
   componentDidMount() {
     axios.get("/api/me").then(response => {
-      console.log(response);
       if (!response.data) this.setState({ userid: null });
       else
         this.setState({
@@ -49,7 +48,6 @@ export default class Navbar extends Component {
   }
 
   render() {
-    // console.log(this.state.name);
     return (
       <div className="nav">
         <AppBar
@@ -68,10 +66,13 @@ export default class Navbar extends Component {
                   }}
                 />
               ) : (
-                <FlatButton
-                  label={"Hey," + "  " + this.state.name}
-                  style={{ color: "white" }}
-                />
+                // <FlatButton
+                //   label={"Hey, " + this.state.name}
+                //   style={{ color: "white" }}
+                // />
+                <div style={{ color: "white", cursor: "default" }}>
+                  {"Hey, " + this.state.name}
+                </div>
               )}
             </ListItem>
           }
@@ -92,7 +93,6 @@ export default class Navbar extends Component {
           <MenuItem
             primaryText="Sign out"
             onClick={() => this.handleLogout()}
-            // href="/logout"
           />
         </Drawer>
       </div>

@@ -6,9 +6,8 @@ import numeral from "numeral";
 import Paper from "material-ui/Paper";
 import TextField from "material-ui/TextField";
 import FloatingActionButton from "material-ui/FloatingActionButton";
-import moment from "moment";
-import IconButton from "material-ui/IconButton";
 import ContentAdd from "material-ui/svg-icons/content/add";
+import SwapVert from "material-ui/svg-icons/action/swap-vert";
 import Snackbar from "material-ui/Snackbar";
 import "./Landing.css";
 
@@ -38,7 +37,6 @@ export default class Landing extends Component {
 
   componentDidMount() {
     axios.get("/api/me").then(response => {
-      console.log(response.data);
       if (!response.data) this.setState({ authid: null });
       else
         this.setState({
@@ -58,7 +56,6 @@ export default class Landing extends Component {
 
   render() {
     let data = this.state.coins;
-    console.log(this.state.authid);
 
     if (this.state.search) {
       data = data.filter(row => {
@@ -74,8 +71,9 @@ export default class Landing extends Component {
     const columns = [
       {
         Header: "Symbol",
+
         accessor: "symbol",
-        headerClassName: "pink",
+        headerClassName: "pink-two",
         className: "bold",
 
         Cell: row => <div>{row.value}</div>
@@ -93,6 +91,7 @@ export default class Landing extends Component {
         Header: "Market Cap",
         headerClassName: "pink",
         accessor: "market_cap_usd",
+        className: "coins",
 
         sortMethod: function(a, b) {
           return a - b;
@@ -102,22 +101,19 @@ export default class Landing extends Component {
       {
         Header: "Price (USD)",
         headerClassName: "pink",
-
+        className: "coins",
         accessor: "price_usd",
         sortMethod: function(a, b) {
           return a - b;
         },
         Cell: row => <div>{numeral(row.value).format("$0,0.0000")}</div>
       },
-      // {
-      //   Header: "Date",
-      //   Cell: moment().format("l")
-      // },
+
       {
         Header: "24h Change",
-        headerClassName: "pink",
+        headerClassName: "pink-button",
         accessor: "percent_change_24h",
-
+        className: "coins-button",
         sortMethod: function(a, b) {
           return a - b;
         },
@@ -167,30 +163,31 @@ export default class Landing extends Component {
           />
           Crypto Price Watch
         </div>
-
-        <Paper>
-          <ReactTable
-            data={data}
-            columns={columns}
-            filterable={false}
-            resizable={false}
-            className="-highlight "
-            style={{
-              fontSize: ".7em"
-            }}
-            defaultPageSize={50}
-            paginationStyle={{ backgroundColor: "#00bcd4", color: "white" }}
-            getTdProps={(state, rowInfo, column, instance) => {
-              return {
-                onClick: () => {
-                  if (column.Header === "24h Change") {
-                    this.addToPortfolio(rowInfo.original.id);
+        <div className="paper">
+          <Paper>
+            <ReactTable
+              data={data}
+              columns={columns}
+              filterable={false}
+              resizable={false}
+              className="-highlight "
+              style={{
+                fontSize: ".7em"
+              }}
+              defaultPageSize={50}
+              paginationStyle={{ backgroundColor: "#00bcd4", color: "white" }}
+              getTdProps={(state, rowInfo, column, instance) => {
+                return {
+                  onClick: () => {
+                    if (column.Header === "24h Change") {
+                      this.addToPortfolio(rowInfo.original.id);
+                    }
                   }
-                }
-              };
-            }}
-          />
-        </Paper>
+                };
+              }}
+            />
+          </Paper>
+        </div>
       </div>
     );
   }
