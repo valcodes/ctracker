@@ -3,6 +3,8 @@
 ### work in progress
 
 <p align="center">
-  <img src="/Landing.png"/>
+  <img src="/landing1.png"/>
+   <img src="/mobile1.png"/>
+    <img src="/portfolio.png"/>
   
 </p>
