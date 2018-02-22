@@ -1,6 +1,6 @@
 {
   "proxy": "http://localhost:3001",
-  "name": "ctracker",
+  "name": "Crypto Price Watch",
 
   "version": "0.1.0",
   "private": true,

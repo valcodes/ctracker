@@ -1,8 +1,11 @@
 .pink {
   color: #00bcd4;
   font-family: "Roboto", sans-serif;
-  /* font-weight: bold; */
-  /* max-width: 12%; */
+  height: 4vh;
+}
+.pink-button {
+  color: #00bcd4;
+  font-family: "Roboto", sans-serif;
   height: 4vh;
 }
 .bold {
@@ -16,24 +19,39 @@
 }
 
 .search {
-  margin-left: 2vh;
-  margin-right: 2vh;
+  /* margin-left: 2vh;
+  margin-right: 2vh; */
   margin-bottom: 0.5vh;
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   align-items: center;
   color: #00bcd4;
-  width: 100vh;
+  width: 100%;
   font-family: "Roboto", sans-serif;
-  /* font-weight: bold; */
 }
 .-highlight {
   width: 100vh;
 }
+.paper {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+}
 .pink-one {
   color: #00bcd4;
-  /* font-weight: bold; */
+  font-family: "Roboto", sans-serif;
   font-size: 1em;
+}
+.pink-two {
+  color: #00bcd4;
+  font-family: "Roboto", sans-serif;
+  font-size: 1em;
+}
+.pink {
+  color: #00bcd4;
+  font-family: "Roboto", sans-serif;
+  height: 4vh;
 }
 .coin-header {
   width: 80%;
@@ -44,19 +62,79 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
 }
 @media (max-width: 780px) {
+  .coins {
+    max-width: 25vw;
+    font-size: 0.7em;
+  }
+  .coins-button {
+    font-size: 0.7em;
+    font-weight: bold;
+    max-width: 28vw;
+  }
+  .bold {
+    font-weight: bold;
+    color: #00bcd4;
+    max-width: 15vw;
+  }
   .coin-name {
     display: none;
   }
+  .pink {
+    max-width: 25vw;
+    color: #00bcd4;
+    font-family: "Roboto", sans-serif;
+    font-size: 1em;
+  }
+  .pink-button {
+    max-width: 28vw;
+    color: #00bcd4;
+    font-family: "Roboto", sans-serif;
+    font-size: 1em;
+  }
   .pink-one {
     display: none;
-    /* flex-direction: row; */
+  }
+  .pink-two {
+    max-width: 15vw;
+    color: #00bcd4;
+    font-family: "Roboto", sans-serif;
+    font-size: 1em;
   }
   .coin-header {
-    width: 100%;
+    width: 100vw;
+    height: auto;
+    /* margin-left: 5vh;
+    margin-right: 5vh;
+    margin-top: 3vh; */
+    display: flex;
+    flex-direction: column;
+  }
+  .buttons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .paper {
+    width: 100vw;
+    height: auto;
   }
   .-highlight {
-    width: 100%;
+    width: 100vw;
+    height: auto;
+  }
+  .search {
+    /* margin-left: 2vh;
+    margin-right: 2vh; */
+    margin-bottom: 0.5vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    color: #00bcd4;
+    /* width: 100%; */
+    font-family: "Roboto", sans-serif;
   }
 }

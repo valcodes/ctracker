@@ -7,7 +7,7 @@ import Paper from "material-ui/Paper";
 import TextField from "material-ui/TextField";
 import FloatingActionButton from "material-ui/FloatingActionButton";
 import FlatButton from "material-ui/FlatButton";
-// import moment from "moment";
+
 import Dialog from "material-ui/Dialog";
 import Snackbar from "material-ui/Snackbar";
 import ContentClear from "material-ui/svg-icons/content/clear";
@@ -38,7 +38,6 @@ export default class Portfolio extends Component {
 
   componentDidMount() {
     axios.get("/api/me").then(response => {
-      console.log(response.data);
       if (!response.data) this.setState({ authid: null });
       else
         this.setState({
@@ -48,7 +47,6 @@ export default class Portfolio extends Component {
     });
 
     axios.get("/api/favorites").then(response => {
-      console.log(response);
       if (response.data[0].array_agg === null) {
         // displaying a popup if there are no coins in portfolio
         this.setState({ noCoinsDialog: true });
@@ -68,7 +66,7 @@ export default class Portfolio extends Component {
       }
     });
     //using setTimeout as a workaround to avoid having both dialogs displayed at same time
-    setTimeout(this.promptUserToLogin, 2000);
+    setTimeout(this.promptUserToLogin, 1500);
   }
 
   removeFromPortfolio = coin => {
@@ -80,29 +78,31 @@ export default class Portfolio extends Component {
       )
       .then(response => {
         const newPortfolio = this.state.coins;
-        console.log(newPortfolio.indexOf(coin));
-        for (let i = 0; i < newPortfolio.length; i++) {
-          console.log(coin[i]);
-          newPortfolio.splice(newPortfolio.indexOf(coin[i]), coin[i + 1]);
+        var id = coin;
+        for (var i = 0; i < newPortfolio.length; i++) {
+          if (newPortfolio[i].id === id) {
+            newPortfolio.splice(i, 1);
+
+            this.setState({
+              coins: newPortfolio,
+              open: true,
+              coin: coin.toUpperCase()
+            });
+            break;
+          }
         }
-        // newPortfolio.splice(newPortfolio.indexOf(coin), 1);
-        this.setState({
-          coins: newPortfolio,
-          open: true,
-          coin: coin.toUpperCase()
-        });
       })
       .catch(console.log);
   };
+
   promptUserToLogin() {
-    console.log(this.state.authid);
-    if (this.state.name == "") {
-      console.log("what");
+    if (this.state.name === "") {
       return this.setState({ loginWarningDialog: true });
     } else {
       return this.setState({ loginWarningDialog: false });
     }
   }
+
   render() {
     let data = this.state.coins;
 
@@ -121,7 +121,7 @@ export default class Portfolio extends Component {
       {
         Header: "Symbol",
         accessor: "symbol",
-        headerClassName: "pink",
+        headerClassName: "pink-two",
         className: "bold",
 
         Cell: row => <div>{row.value}</div>
@@ -138,7 +138,7 @@ export default class Portfolio extends Component {
         Header: "Market Cap",
         headerClassName: "pink",
         accessor: "market_cap_usd",
-
+        className: "coins",
         sortMethod: function(a, b) {
           return a - b;
         },
@@ -147,7 +147,7 @@ export default class Portfolio extends Component {
       {
         Header: "Price (USD)",
         headerClassName: "pink",
-
+        className: "coins",
         accessor: "price_usd",
         sortMethod: function(a, b) {
           return a - b;
@@ -157,9 +157,9 @@ export default class Portfolio extends Component {
 
       {
         Header: "24h Change",
-        headerClassName: "pink",
+        headerClassName: "pink-button",
         accessor: "percent_change_24h",
-
+        className: "coins-button",
         sortMethod: function(a, b) {
           return a - b;
         },
@@ -206,66 +206,68 @@ export default class Portfolio extends Component {
           />
           Portfolio
         </div>
-        <Dialog
-          title="You are not logged in!"
-          actions={
-            <div>
+        <div>
+          <Dialog
+            title="You are not logged in!"
+            actions={
+              <div>
+                <FlatButton
+                  label="Cancel"
+                  primary={true}
+                  onClick={() => this.setState({ loginWarningDialog: false })}
+                />
+                <FlatButton
+                  label="login"
+                  primary={true}
+                  onClick={() => this.handleLogin()}
+                />
+              </div>
+            }
+            modal={false}
+            open={this.state.loginWarningDialog}
+            onRequestClose={() => this.setState({ loginWarningDialog: false })}
+          >
+            Please log in to view Portfolio
+          </Dialog>
+          <Dialog
+            title="You have no coins added to portfolio"
+            actions={
               <FlatButton
                 label="Cancel"
                 primary={true}
-                onClick={() => this.setState({ loginWarningDialog: false })}
+                onClick={() => this.setState({ noCoinsDialog: false })}
               />
-              <FlatButton
-                label="login"
-                primary={true}
-                onClick={() => this.handleLogin()}
-              />
-            </div>
-          }
-          modal={false}
-          open={this.state.loginWarningDialog}
-          onRequestClose={() => this.setState({ loginWarningDialog: false })}
-        >
-          Please log in to view Portfolio
-        </Dialog>
-        <Dialog
-          title="You have no coins added to portfolio"
-          actions={
-            <FlatButton
-              label="Cancel"
-              primary={true}
-              onClick={() => this.setState({ noCoinsDialog: false })}
-            />
-          }
-          modal={false}
-          open={this.state.noCoinsDialog}
-          onRequestClose={() => this.setState({ noCoinsDialog: false })}
-        >
-          Track some cryptos! That lambo isn't going to buy itself!
-        </Dialog>
-        <Paper>
-          <ReactTable
-            data={data}
-            columns={columns}
-            filterable={false}
-            resizable={false}
-            className="-highlight "
-            style={{
-              fontSize: ".7em"
-            }}
-            defaultPageSize={50}
-            paginationStyle={{ backgroundColor: "#00bcd4", color: "white" }}
-            getTdProps={(state, rowInfo, column, instance) => {
-              return {
-                onClick: () => {
-                  if (column.Header === "24h Change") {
-                    this.removeFromPortfolio(rowInfo.original.id);
+            }
+            modal={false}
+            open={this.state.noCoinsDialog}
+            onRequestClose={() => this.setState({ noCoinsDialog: false })}
+          >
+            Track some cryptos! That lambo isn't going to buy itself!
+          </Dialog>
+          <Paper>
+            <ReactTable
+              data={data}
+              columns={columns}
+              filterable={false}
+              resizable={false}
+              className="-highlight "
+              style={{
+                fontSize: ".7em"
+              }}
+              defaultPageSize={50}
+              paginationStyle={{ backgroundColor: "#00bcd4", color: "white" }}
+              getTdProps={(state, rowInfo, column, instance) => {
+                return {
+                  onClick: () => {
+                    if (column.Header === "24h Change") {
+                      this.removeFromPortfolio(rowInfo.original.id);
+                    }
                   }
-                }
-              };
-            }}
-          />
-        </Paper>
+                };
+              }}
+            />
+          </Paper>
+        </div>
       </div>
     );
   }
