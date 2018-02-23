@@ -31,9 +31,7 @@ export default class Portfolio extends Component {
     this.promptUserToLogin = this.promptUserToLogin.bind(this);
   }
   handleLogin() {
-    // window.location.href = "/login";
-
-    window.location.href = "http://localhost:3001/login";
+    window.location.href = "/login";
   }
 
   componentDidMount() {
@@ -71,11 +69,7 @@ export default class Portfolio extends Component {
 
   removeFromPortfolio = coin => {
     axios
-      .delete(
-        `http://localhost:3001/api/deleteCoin?coinid=${coin}&userid=${
-          this.state.authid
-        }`
-      )
+      .delete(`/api/deleteCoin?coinid=${coin}&userid=${this.state.authid}`)
       .then(response => {
         const newPortfolio = this.state.coins;
         var id = coin;

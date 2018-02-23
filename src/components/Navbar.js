@@ -24,9 +24,7 @@ export default class Navbar extends Component {
   }
 
   handleLogin() {
-    // window.location.href = "/login";
-
-    window.location.href = "http://localhost:3001/login";
+    window.location.href = "/login";
   }
 
   handleLogout() {
