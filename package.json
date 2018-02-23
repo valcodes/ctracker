@@ -1,6 +1,6 @@
 {
+  "proxy": "http://localhost:3001",
   "name": "Crypto_Price_Watch",
-
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -28,15 +28,13 @@
     "react-scripts": "1.1.0",
     "react-table": "^6.7.6"
   },
-
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },
-  "description":
-    "This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).",
+  "description": "This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).",
   "main": "index.js",
   "devDependencies": {
     "eslint-config-standard": "^11.0.0-beta.0",
