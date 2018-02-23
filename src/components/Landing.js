@@ -45,7 +45,7 @@ export default class Landing extends Component {
         });
     });
     axios
-      .get("http://localhost:3001/api/getcoins")
+      .get("/api/getcoins")
       .then(results => {
         this.setState({
           coins: results.data
