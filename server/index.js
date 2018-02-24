@@ -32,7 +32,7 @@ app.use(
 
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(express.static(`${__dirname}/../build`));
+app.use("/", express.static(`${__dirname}/../build`));
 
 passport.use(
   new Auth0Strategy(
