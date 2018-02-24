@@ -24,7 +24,8 @@ export default class Navbar extends Component {
   }
 
   handleLogin() {
-    window.location.href = "/login";
+    // window.location.href = "/login";
+    axios.get("/login").then(response => response.data);
   }
 
   handleLogout() {
@@ -64,10 +65,6 @@ export default class Navbar extends Component {
                   }}
                 />
               ) : (
-                // <FlatButton
-                //   label={"Hey, " + this.state.name}
-                //   style={{ color: "white" }}
-                // />
                 <div style={{ color: "white", cursor: "default" }}>
                   {"Hey, " + this.state.name}
                 </div>
