@@ -15,6 +15,8 @@ const port = process.env.PORT || 3001;
 
 const app = express();
 
+app.use(express.static(`${__dirname}/../build`));
+
 app.use(json());
 app.use(cors());
 
@@ -32,7 +34,6 @@ app.use(
 
 app.use(passport.initialize());
 app.use(passport.session());
-app.use("/", express.static(`${__dirname}/../build`));
 
 passport.use(
   new Auth0Strategy(
@@ -113,9 +114,8 @@ app.get("/api/favorites", controller.getFavs);
 app.delete("/api/deleteCoin", controller.deleteFromPortfolio);
 
 const path = require("path");
-
 app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "/../build/index.html"));
+  res.sendFile(path.join(__dirname, "../build/index.html"));
 });
 
 app.listen(port, () => {
