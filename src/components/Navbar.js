@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import FlatButton from "material-ui/FlatButton";
-
+import { Link } from "react-router-dom";
 import ListItem from "material-ui/List/ListItem";
 import MenuItem from "material-ui/MenuItem";
 import AppBar from "material-ui/AppBar";
@@ -81,12 +81,12 @@ export default class Navbar extends Component {
           onRequestChange={open => this.setState({ open })}
           iconButtonElement={<IconButton />}
         >
-          <MenuItem primaryText="Home" onClick={this.handleClose} href="/" />
-          <MenuItem
-            primaryText="Portfolio"
-            onClick={this.handleClose}
-            href="portfolio"
-          />
+          <Link to="/" style={{ textDecoration: "none" }}>
+            <MenuItem primaryText="Home" onClick={this.handleClose} />
+          </Link>
+          <Link to="/Portfolio" style={{ textDecoration: "none" }}>
+            <MenuItem primaryText="Portfolio" onClick={this.handleClose} />
+          </Link>
 
           <MenuItem
             primaryText="Sign out"

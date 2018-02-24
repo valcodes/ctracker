@@ -1,0 +1,1 @@
+DELETE FROM portfolio WHERE coinid =$1 AND authid =$2
