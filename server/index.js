@@ -19,10 +19,6 @@ app.use(json());
 app.use(cors());
 app.use(express.static(`${__dirname}/../build`));
 
-massive(process.env.CONNECTION_STRING)
-  .then(db => app.set("db", db))
-  .catch(console.log);
-
 app.use(
   session({
     secret: process.env.SECRET,
@@ -33,6 +29,10 @@ app.use(
 
 app.use(passport.initialize());
 app.use(passport.session());
+
+massive(process.env.CONNECTION_STRING)
+  .then(db => app.set("db", db))
+  .catch(console.log);
 
 passport.use(
   new Auth0Strategy(
