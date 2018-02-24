@@ -1,1 +1,0 @@
-INSERT INTO portfolio (authid, coinid) values ($1, $2) RETURNING authid, coinid

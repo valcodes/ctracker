@@ -24,8 +24,7 @@ export default class Navbar extends Component {
   }
 
   handleLogin() {
-    // window.location.href = "/login";
-    axios.get("/login").then(response => response.data);
+    window.location.href = "/login";
   }
 
   handleLogout() {
