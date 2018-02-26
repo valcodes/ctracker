@@ -80,7 +80,7 @@ export default class Navbar extends Component {
           <Link to="/" style={{ textDecoration: "none" }}>
             <MenuItem primaryText="Home" onClick={this.handleClose} />
           </Link>
-          <Link to="/Portfolio" style={{ textDecoration: "none" }}>
+          <Link to="/portfolio" style={{ textDecoration: "none" }}>
             <MenuItem primaryText="Portfolio" onClick={this.handleClose} />
           </Link>
 

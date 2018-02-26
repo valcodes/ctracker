@@ -19,10 +19,6 @@ app.use(json());
 app.use(cors());
 app.use(express.static(`${__dirname}/../build`));
 
-massive(process.env.CONNECTION_STRING)
-  .then(db => app.set("db", db))
-  .catch(console.log);
-
 app.use(
   session({
     secret: process.env.SECRET,
@@ -34,13 +30,16 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
+massive(process.env.CONNECTION_STRING)
+  .then(db => app.set("db", db))
+  .catch(console.log);
+
 passport.use(
   new Auth0Strategy(
     {
       domain: process.env.AUTH0_DOMAIN,
       clientID: process.env.AUTH0_CLIENT_ID,
       clientSecret: process.env.AUTH0_CLIENT_SECRET,
-
       callbackURL: process.env.AUTH0_CALLBACK_URL,
       scope: "openid profile"
     },
